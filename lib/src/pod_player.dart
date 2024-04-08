@@ -80,7 +80,11 @@ class PodVideoPlayer extends StatefulWidget {
   static bool enableGetxLogs = false;
 
   void addToUiController() {
-    Get.find<PodGetXVideoController>(tag: controller.getTag)
+    Get.put(
+      PodGetXVideoController(),
+      permanent: true,
+      tag: controller.getTag,
+    )
 
       ///add to ui controller
       ..podPlayerLabels = podPlayerLabels
@@ -105,11 +109,7 @@ class _PodVideoPlayerState extends State<PodVideoPlayer> with TickerProviderStat
   void initState() {
     super.initState();
     // tag = widget.controller?.tag ?? UniqueKey().toString();
-    _podCtr = Get.put(
-      PodGetXVideoController(),
-      permanent: true,
-      tag: widget.controller.getTag,
-    )..isVideoUiBinded = true;
+    _podCtr = Get.find<PodGetXVideoController>(tag: widget.controller.getTag)..isVideoUiBinded = true;
     if (_podCtr.wasVideoPlayingOnUiDispose ?? false) {
       _podCtr.podVideoStateChanger(PodVideoState.playing, updateUi: false);
     }
@@ -137,15 +137,12 @@ class _PodVideoPlayerState extends State<PodVideoPlayer> with TickerProviderStat
     if (kIsWeb) {
       _podCtr.keyboardFocusWeb?.removeListener(_podCtr.keyboadListner);
     }
-    // _podCtr.keyboardFocus?.unfocus();
-    // _podCtr.keyboardFocusOnFullScreen?.unfocus();
     _podCtr.hoverOverlayTimer?.cancel();
     _podCtr.showOverlayTimer?.cancel();
     _podCtr.showOverlayTimer1?.cancel();
     _podCtr.leftDoubleTapTimer?.cancel();
     _podCtr.rightDoubleTapTimer?.cancel();
     podLog('local PodVideoPlayer disposed');
-    _podCtr.dispose();
     super.dispose();
   }
 
