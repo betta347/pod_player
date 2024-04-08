@@ -97,8 +97,7 @@ class PodVideoPlayer extends StatefulWidget {
   State<PodVideoPlayer> createState() => _PodVideoPlayerState();
 }
 
-class _PodVideoPlayerState extends State<PodVideoPlayer>
-    with TickerProviderStateMixin {
+class _PodVideoPlayerState extends State<PodVideoPlayer> with TickerProviderStateMixin {
   late PodGetXVideoController _podCtr;
 
   // late String tag;
@@ -126,8 +125,6 @@ class _PodVideoPlayerState extends State<PodVideoPlayer>
 
   @override
   void dispose() {
-    super.dispose();
-
     ///Checking if the video was playing when this widget is disposed
     if (_podCtr.isvideoPlaying) {
       _podCtr.wasVideoPlayingOnUiDispose = true;
@@ -148,6 +145,8 @@ class _PodVideoPlayerState extends State<PodVideoPlayer>
     _podCtr.leftDoubleTapTimer?.cancel();
     _podCtr.rightDoubleTapTimer?.cancel();
     podLog('local PodVideoPlayer disposed');
+    _podCtr.dispose();
+    super.dispose();
   }
 
   ///
