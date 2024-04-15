@@ -118,13 +118,22 @@ class PodPlayerController {
   /// Returns the current position of the video
   Duration get currentVideoPosition => _ctr.videoPosition;
 
-  //! video play/pause
+  /// Returns the available video qualities
+  List<VideoQalityUrls> get videoUrls => _ctr.vimeoOrVideoUrls;
+
+  int? get playingVideoQuality => _ctr.vimeoPlayingVideoQuality;
 
   /// plays the video
   void play() => _ctr.podVideoStateChanger(PodVideoState.playing);
 
   /// pauses the video
   void pause() => _ctr.podVideoStateChanger(PodVideoState.paused);
+
+  ///sets the playback speed. speed need to be provided with x. example: setPlayBackSpeed(1.5x)
+  void setPlayBackSpeed(String speed) => _ctr.setVideoPlayBack(speed);
+
+  ///sets the playback speed. speed need to be provided with x. example: setPlayBackSpeed(1.5x)
+  void changeVideoQuality(int quality) => _ctr.changeVideoQuality(quality);
 
   /// toogle play and pause
   void togglePlayPause() {
@@ -185,8 +194,7 @@ class PodPlayerController {
       );
 
   //Change double tap duration
-  void setDoubeTapForwarDuration(int seconds) =>
-      _ctr.doubleTapForwardSeconds = seconds;
+  void setDoubeTapForwarDuration(int seconds) => _ctr.doubleTapForwardSeconds = seconds;
 
   ///Jumps to specific position of the video
   Future<void> videoSeekTo(Duration moment) async {
