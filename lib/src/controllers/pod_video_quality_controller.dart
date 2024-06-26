@@ -38,8 +38,7 @@ class _PodVideoQualityController extends _PodVideoController {
   ) async {
     try {
       podVideoStateChanger(PodVideoState.loading);
-      final vimeoVideoUrls =
-          await VideoApis.getVimeoPrivateVideoQualityUrls(videoId, httpHeader);
+      final vimeoVideoUrls = await VideoApis.getVimeoPrivateVideoQualityUrls(videoId, httpHeader);
 
       ///
       vimeoOrVideoUrls = vimeoVideoUrls ?? [];
@@ -108,19 +107,21 @@ class _PodVideoQualityController extends _PodVideoController {
     String youtubeIdOrUrl,
     bool live,
   ) async {
-    return await VideoApis.getYoutubeVideoQualityUrls(youtubeIdOrUrl, live) ??
-        [];
+    return await VideoApis.getYoutubeVideoQualityUrls(youtubeIdOrUrl, live) ?? [];
   }
 
   Future<void> changeVideoQuality(int? quality) async {
-    if (vimeoOrVideoUrls.isEmpty) {
+    if (vimeoOrVideoUrls.isEmpty || quality == null) {
+      if (vimeoOrVideoUrls.isEmpty) {
+        podLog('vimeoOrVideoUrls is empty');
+      } else {
+        podLog('quality is null');
+      }
       throw Exception('videoQuality cannot be empty');
     }
-    if (vimeoPlayingVideoQuality != quality) {
-      _videoQualityUrl = vimeoOrVideoUrls
-          .where((element) => element.quality == quality)
-          .first
-          .url;
+    if (vimeoPlayingVideoQuality != quality &&
+        vimeoOrVideoUrls.where((element) => element.quality == quality).isNotEmpty) {
+      _videoQualityUrl = vimeoOrVideoUrls.where((element) => element.quality == quality).first.url;
       podLog(_videoQualityUrl);
       vimeoPlayingVideoQuality = quality;
       _videoCtr?.removeListener(videoListner);
@@ -137,6 +138,12 @@ class _PodVideoQualityController extends _PodVideoController {
       onVimeoVideoQualityChanged?.call();
       update();
       update(['update-all']);
+    } else {
+      if (vimeoPlayingVideoQuality == quality) {
+        podLog('quality is same');
+      } else if (vimeoOrVideoUrls.where((element) => element.quality == quality).isNotEmpty) {
+        podLog('quality is not in vimeoOrVideoUrls\n vimeoOrVideoUrls: $vimeoOrVideoUrls\n quality: $quality');
+      }
     }
   }
 }
