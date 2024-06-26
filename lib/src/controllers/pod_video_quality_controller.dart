@@ -113,16 +113,16 @@ class _PodVideoQualityController extends _PodVideoController {
   Future<void> changeVideoQuality(int? quality) async {
     if (vimeoOrVideoUrls.isEmpty || quality == null) {
       if (vimeoOrVideoUrls.isEmpty) {
-        podLog('vimeoOrVideoUrls is empty');
+        print('XXXX fail:  vimeoOrVideoUrls is empty');
       } else {
-        podLog('quality is null');
+        print('XXXX fail:  quality is null');
       }
       throw Exception('videoQuality cannot be empty');
     }
     if (vimeoPlayingVideoQuality != quality &&
         vimeoOrVideoUrls.where((element) => element.quality == quality).isNotEmpty) {
       _videoQualityUrl = vimeoOrVideoUrls.where((element) => element.quality == quality).first.url;
-      podLog(_videoQualityUrl);
+      print('XXXX success: $_videoQualityUrl');
       vimeoPlayingVideoQuality = quality;
       _videoCtr?.removeListener(videoListner);
       podVideoStateChanger(PodVideoState.paused);
@@ -140,9 +140,9 @@ class _PodVideoQualityController extends _PodVideoController {
       update(['update-all']);
     } else {
       if (vimeoPlayingVideoQuality == quality) {
-        podLog('quality is same');
+        print('XXXX fail:  quality is same');
       } else if (vimeoOrVideoUrls.where((element) => element.quality == quality).isNotEmpty) {
-        podLog('quality is not in vimeoOrVideoUrls\n vimeoOrVideoUrls: $vimeoOrVideoUrls\n quality: $quality');
+        print('XXXX fail:  quality is not in vimeoOrVideoUrls\n vimeoOrVideoUrls: $vimeoOrVideoUrls\n quality: $quality');
       }
     }
   }
