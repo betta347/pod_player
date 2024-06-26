@@ -120,7 +120,7 @@ class VideoApis {
         );
         urls.add(
           VideoQalityUrls(
-            quality: 360,
+            quality: 720,
             url: url,
           ),
         );
